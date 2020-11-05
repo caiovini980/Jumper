@@ -30,9 +30,13 @@ public class PlayerPass : MonoBehaviour
     {
         if (collision.CompareTag("TopPlatform"))
         {
+            StartCoroutine(WaitToJump(0.2f));
             foot.enabled = true;
         }
     }
 
-
+    IEnumerator WaitToJump(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+    }
 }

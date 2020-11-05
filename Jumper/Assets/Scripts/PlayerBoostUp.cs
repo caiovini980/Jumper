@@ -8,13 +8,14 @@ public class PlayerBoostUp : MonoBehaviour
 
     [SerializeField] private bool canJump;
     private Animator animator;
-    private float speed = 5f;
+    public float jumpSpeed = 10f;
 
     //Animations
     private string PLAYER_JUMP = "isJumping";
     private string PLAYER_TAKEOFF = "takeOff";
 
     public int jumpCount;
+    public TrailRenderer trail;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class PlayerBoostUp : MonoBehaviour
     void Start()
     {
         jumpCount = 0;
+
         if (!playerRb)
             return;
 
@@ -34,21 +36,29 @@ public class PlayerBoostUp : MonoBehaviour
 
     private void Update()
     {
-        if (canJump && playerRb.velocity.y <= 0)
+        if (canJump)
         {
             animator.SetTrigger(PLAYER_TAKEOFF);
-            playerRb.AddForce(Vector2.up * speed, ForceMode2D.Impulse);
+
+            Vector2 velocity = playerRb.velocity;
+            velocity.y = jumpSpeed;
+            playerRb.velocity = velocity;
+
             jumpCount++;
             canJump = false;
         }
+
         animator.SetBool(PLAYER_JUMP, false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        canJump = true;
-        animator.SetBool(PLAYER_JUMP, true);
-        Debug.Log("Collision detected");
+        if (collision.relativeVelocity.y <= 0f)
+        {
+            canJump = true;
+            animator.SetBool(PLAYER_JUMP, true);
+            Debug.Log("Collision detected");
+        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
