@@ -34,13 +34,15 @@ public class PlatformSpawner : MonoBehaviour
         spawnPlatformPosition = new Vector2(0, spawnPlatformPosition.y + 1f);
         spawnPlatformPosition.x = Random.Range(- levelWidth, levelWidth);
 
-        if (player.transform.position.y % 50f == 0)
-        {
-            Instantiate(boostPlatformPrefab, spawnPlatformPosition, Quaternion.identity);
-        }
-        else
+        int spawnRandomPlatformIndex = Random.Range(1, 20);
+
+        if (spawnRandomPlatformIndex < 18)
         {
             Instantiate(platformPrefab, spawnPlatformPosition, Quaternion.identity);
+        }
+        else if (spawnRandomPlatformIndex > 18)
+        {
+            Instantiate(boostPlatformPrefab, spawnPlatformPosition, Quaternion.identity);
         }
     }
 }
