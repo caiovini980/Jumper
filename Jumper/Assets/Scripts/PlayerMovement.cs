@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5.5f;
-    private float movementX = 0f;
+    private bool isTouched;
+    private bool _isMovingLeft = false;
+    private bool _isMovingRight = false;
     private Rigidbody2D rb;
 
     private void Awake()
@@ -31,30 +33,61 @@ public class PlayerMovement : MonoBehaviour
             transform.position = new Vector2(3f, transform.position.y);
         }
 
-        CalculateMovement(); //PC Only
+        CalculateMovement();
     }
 
     public void CalculateMovement()
     {
-        movementX = Input.GetAxis("Horizontal") * speed;
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                isTouched = true;
+            }
+
+            else if (touch.phase == TouchPhase.Stationary)
+            {
+                if (isTouched)
+                {
+                    if (touch.position.x > Screen.width / 2)
+                    {
+                        //go right
+                        MoveRight();
+                    }
+
+                    else if (touch.position.x < Screen.width / 2)
+                    {
+                        //go left
+                        MoveLeft();
+                    }
+                }
+            }
+
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                StopMoving();
+            }
+        }
     }
 
-    private void FixedUpdate()
+    void MoveRight()
     {
-        Vector2 velocity = rb.velocity;
-        velocity.x = movementX;
-        rb.velocity = velocity;
+        rb.velocity = new Vector2(speed, rb.velocity.y);
+        _isMovingRight = true;
+    }
 
-        /*if (Input.touchCount > 0)
-        {
-            if (Input.GetTouch(0).position.x > Screen.width / 2)
-            {
-                //go right
-            }
-            else if (Input.GetTouch(0).position.x < Screen.width / 2)
-            {
-                //go left
-            }
-        }*/
+    void MoveLeft()
+    {
+        rb.velocity = new Vector2(-speed, rb.velocity.y);
+        _isMovingLeft = true;
+    }
+
+    void StopMoving()
+    {
+        rb.velocity = new Vector2(0f, rb.velocity.y);
+        _isMovingRight = false;
+        _isMovingLeft = false;
     }
 }

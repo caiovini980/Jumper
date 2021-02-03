@@ -8,6 +8,7 @@ public class PlatformSpawner : MonoBehaviour
     public GameObject firstPlatform;
     public GameObject platformPrefab;
     public GameObject boostPlatformPrefab;
+    public GameObject breakablePlatformPrefab;
 
     private Vector2 spawnPlatformPosition;
     private float levelWidth = 2.3f;
@@ -20,9 +21,9 @@ public class PlatformSpawner : MonoBehaviour
 
     private void Update()
     {
-        float distanceToTheTop = Vector2.Distance(player.transform.position, spawnPlatformPosition);
+        float distanceToThePlatform = Vector2.Distance(player.transform.position, spawnPlatformPosition);
 
-        if (distanceToTheTop < distanceToSpawn)
+        if (distanceToThePlatform < distanceToSpawn)
         {
             SpawnPlatforms();
         }
@@ -31,18 +32,36 @@ public class PlatformSpawner : MonoBehaviour
     public void SpawnPlatforms()
     {
         //set a place to instantiate the platforms
-        spawnPlatformPosition = new Vector2(0, spawnPlatformPosition.y + 1f);
-        spawnPlatformPosition.x = Random.Range(- levelWidth, levelWidth);
+        spawnPlatformPosition = new Vector2(GetRandomPositionX(), spawnPlatformPosition.y + 1f);
 
-        int spawnRandomPlatformIndex = Random.Range(1, 20);
+        int spawnRandomPlatformIndex = GetRandomPlatform();
 
-        if (spawnRandomPlatformIndex < 18)
+        //Spawn normal Platforms
+        if (spawnRandomPlatformIndex <= 60)
         {
             Instantiate(platformPrefab, spawnPlatformPosition, Quaternion.identity);
         }
-        else if (spawnRandomPlatformIndex > 18)
+
+        //Spawn Moving Platforms
+        else if (spawnRandomPlatformIndex > 60 && spawnRandomPlatformIndex <= 90)
+        {
+            Instantiate(breakablePlatformPrefab, spawnPlatformPosition, Quaternion.identity);
+        }
+
+        //Spawn Boost Platforms
+        else if (spawnRandomPlatformIndex > 90)
         {
             Instantiate(boostPlatformPrefab, spawnPlatformPosition, Quaternion.identity);
         }
+    }
+
+    int GetRandomPlatform()
+    {
+        return Random.Range(1, 100);
+    }
+
+    float GetRandomPositionX()
+    {
+        return Random.Range(-levelWidth, levelWidth);
     }
 }

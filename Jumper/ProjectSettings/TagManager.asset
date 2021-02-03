@@ -9,6 +9,7 @@ TagManager:
   - Head
   - DeathZone
   - BoostPlatform
+  - BreakablePlatform
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Platforms
+  - Background
   - 
   - 
   - 
@@ -45,4 +46,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 2224885279
+    locked: 0
+  - name: Platforms
+    uniqueID: 1586836487
     locked: 0

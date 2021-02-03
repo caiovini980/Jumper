@@ -14,8 +14,8 @@ public class PlayerDeathTrigger : MonoBehaviour
     private void Awake()
     {
         player = GameObject.Find("Player");
-        playerRb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
-        playerSprite = GameObject.Find("Player").GetComponent<SpriteRenderer>();
+        playerRb = player.GetComponent<Rigidbody2D>();
+        playerSprite = player.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -31,7 +31,6 @@ public class PlayerDeathTrigger : MonoBehaviour
             //play death particles
             playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
             playerSprite.enabled = false;
-            Debug.Log("COLIDIU PORRA");
             Destroy(player, 2f);
             isPlayerDead = true;
         }
