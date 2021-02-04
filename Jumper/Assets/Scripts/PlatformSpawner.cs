@@ -10,12 +10,19 @@ public class PlatformSpawner : MonoBehaviour
     public GameObject boostPlatformPrefab;
     public GameObject breakablePlatformPrefab;
 
+    private ScreenManager screen;
     private Vector2 spawnPlatformPosition;
-    private float levelWidth = 2.3f;
+    private Vector2 screenBoundsX;
     private int distanceToSpawn = 5;
+
+    private void Awake()
+    {
+        screen = GetComponent<ScreenManager>();
+    }
 
     private void Start()
     {
+        screenBoundsX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Camera.main.transform.position.y, Camera.main.transform.position.z));
         spawnPlatformPosition = firstPlatform.transform.position;
     }
 
@@ -23,7 +30,9 @@ public class PlatformSpawner : MonoBehaviour
     {
         float distanceToThePlatform = Vector2.Distance(player.transform.position, spawnPlatformPosition);
 
-        if (distanceToThePlatform < distanceToSpawn)
+        Debug.Log(distanceToThePlatform);
+
+        if (distanceToThePlatform < distanceToSpawn + 2)
         {
             SpawnPlatforms();
         }
@@ -62,6 +71,6 @@ public class PlatformSpawner : MonoBehaviour
 
     float GetRandomPositionX()
     {
-        return Random.Range(-levelWidth, levelWidth);
+        return Random.Range(screenBoundsX.x, -screenBoundsX.x);
     }
 }
